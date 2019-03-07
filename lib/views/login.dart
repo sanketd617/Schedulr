@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
+import 'package:schedulr/global.dart';
+import 'package:schedulr/views/student_home.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.title}) : super(key: key);
+  LoginPage({Key key, this.loginType, this.instituteName}) : super(key: key);
 
-  final String title;
+  final String loginType;
+  final String instituteName;
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -29,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding, paddingTop, padding, padding),
               children: <Widget>[
                 _makeSizedBox(1.0),
+                _makeBackNavigation(context),
                 _makeTitle(),
                 _makeTitleUnderline(),
                 _makeSizedBox(1.0),
@@ -46,6 +50,26 @@ class _LoginPageState extends State<LoginPage> {
             )));
   }
 
+  Align _makeBackNavigation(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: FlatButton.icon(
+        padding: const EdgeInsets.all(0.0),
+        icon: Icon(Icons.navigate_before),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        label: Container(
+          width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.8,
+          child: Text(widget.instituteName,),
+        ),
+      ),
+    );
+  }
+
   Row _makeSocialLoginButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -57,6 +81,25 @@ class _LoginPageState extends State<LoginPage> {
             },
             borderRadius: BorderRadius.circular(30.0),
             child: Icon(GroovinMaterialIcons.google),
+          ),
+          height: 46.0,
+          width: 46.0,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey, width: 0.5)),
+        ),
+        Container(
+          child: null,
+          height: 46.0,
+          width: 23.0,
+        ),
+        Container(
+          child: InkWell(
+            onTap: () {
+              // TODO
+            },
+            borderRadius: BorderRadius.circular(30.0),
+            child: Icon(GroovinMaterialIcons.fingerprint),
           ),
           height: 46.0,
           width: 46.0,
@@ -104,6 +147,11 @@ class _LoginPageState extends State<LoginPage> {
               _formKey.currentState.save();
               //TODO
             }
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => StudentHome(),
+                ));
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
@@ -187,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.all(padding),
       child: Text(
-        "Login",
+        widget.loginType,
         style: TextStyle(fontSize: fontSize),
       ),
     );
