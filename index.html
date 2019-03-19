@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<script>
+    var D = 256;
+    var R = D/2 - 10;
+    var r = D/3;
+    var cx = D/2;
+    var cy = D/2;
+
+    function c(i){
+        var angle = i*Math.PI/6;
+        return {
+            x1: cx + R*Math.sin(angle),
+            x2: cy + r*Math.sin(angle),
+            y1: cx + R*Math.cos(angle),
+            y2: cy + r*Math.cos(angle),
+        };
+    }
+
+    var html = "<table>";
+
+    html += "<tr bordered>";
+        html += "<td>N</td>";
+        html += "<td>x1</td>";
+        html += "<td>y1</td>";
+        html += "<td>x2</td>";
+        html += "<td>y2</td>";
+        html += "</tr>";
+
+    for(var i=0; i<12; i++){
+        html += "<tr>";
+        html += "<td>"+i+"</td>";
+
+        html += "<td>M "+c(i).x1+","+c(i).y1+" L "+c(i).x2+","+c(i).y2+"</td>";
+
+        /*
+        html += "<td>"+c(i).x1+"</td>";
+        html += "<td>"+c(i).y1+"</td>";
+        html += "<td>"+c(i).x2+"</td>";
+        html += "<td>"+c(i).y2+"</td>";
+        */
+
+        html += "</tr>";
+    }
+
+    html += "</table>";
+
+    document.write(html);
+
+
+</script>
+
+
+<style>
+    td{
+        padding: 0.5rem;
+        border: 1px solid lightgrey;
+    }
+
+</style>
+
+</body>
+</html>

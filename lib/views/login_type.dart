@@ -62,7 +62,7 @@ class _LoginTypePageState extends State<LoginTypePage> {
     return Padding(
       padding: const EdgeInsets.all(padding),
       child: Text(
-        "Schedulr",
+        AppDetails.appName,
         style: TextStyle(fontSize: fontSize),
       ),
     );

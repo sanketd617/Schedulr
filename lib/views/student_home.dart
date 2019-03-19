@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:schedulr/global.dart';
 import 'package:schedulr/main.dart';
+import 'package:schedulr/views/attendance.dart';
+import 'package:schedulr/views/notifications.dart';
+import 'package:schedulr/views/time_table.dart';
 
 class StudentHome extends StatefulWidget {
   StudentHome({Key key}) : super(key: key);
@@ -12,7 +15,7 @@ class StudentHome extends StatefulWidget {
 
 class _StudentHomeState extends State<StudentHome> {
   final String url =
-      "https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg";
+      "http://www.mhcsa.org.au/wp-content/uploads/2016/08/default-non-user-no-photo.jpg";
   GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
   @override
@@ -26,7 +29,7 @@ class _StudentHomeState extends State<StudentHome> {
               backgroundColor: Colors.grey[900],
               expandedHeight: MediaQuery.of(context).size.height / 3,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text("Tom Cruise"),
+                title: Text("Some Name"),
                 background: Image.network(
                   url,
                   fit: BoxFit.cover,
@@ -44,34 +47,55 @@ class _StudentHomeState extends State<StudentHome> {
         ));
   }
 
+  void openNotifications() {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => NotificationsPage(),
+    ));
+  }
+
+  void openAttendance() {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => AttendancePage(),
+    ));
+  }
+
+  void openTimeTable() {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => TimeTablePage(),
+    ));
+  }
+
   List buildList() {
     List<Widget> widgets = List();
 
     widgets.add(
-      _makeWidget(Icons.notifications, "Notifications", "1 unread", ""),
+      _makeWidget(Icons.notifications, "Notifications", "1 unread", "",
+          openNotifications),
     );
 
     widgets.add(
-      _makeWidget(Icons.event_note, "Attendance", "85%", "Excellent"),
+      _makeWidget(
+          Icons.event_note, "Attendance", "85%", "Excellent", openAttendance),
     );
 
     widgets.add(
-      _makeWidget(Icons.calendar_today, "Time Table", "USP", "Up next : DCN"),
+      _makeWidget(Icons.calendar_today, "Time Table", "USP", "Up next : DCN",
+          openTimeTable),
     );
 
-    widgets.add(
-      _makeWidget(Icons.event_seat, "Appointments", "None", ""),
-    );
-
-    widgets.add(
-      _makeWidget(Icons.schedule, "Pending works", "None", ""),
-    );
+//    widgets.add(
+//      _makeWidget(Icons.event_seat, "Appointments", "None", "", null),
+//    );
+//
+//    widgets.add(
+//      _makeWidget(Icons.schedule, "Pending works", "None", "", null),
+//    );
 
     return widgets;
   }
 
   InkWell _makeWidget(IconData icon, String heading, String subHeadingLeft,
-      String subHeadingRight) {
+      String subHeadingRight, onCick) {
     Color primaryColor = Colors.grey[900];
     return InkWell(
       child: Card(
@@ -116,9 +140,7 @@ class _StudentHomeState extends State<StudentHome> {
               ),
             ),
           )),
-      onTap: () {
-        _key.currentState.showSnackBar(SnackBar(content: Text("Hello")));
-      },
+      onTap: onCick,
     );
   }
 }

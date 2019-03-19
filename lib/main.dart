@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Schedulr',
+      title: AppDetails.appName,
       theme: ThemeData(
         brightness: Brightness.light,
       ),

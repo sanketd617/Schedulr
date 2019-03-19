@@ -24,7 +24,6 @@ class _SelectInstitutePageState extends State<SelectInstitutePage> {
 
     return Scaffold(
         body: Container(
-      padding: const EdgeInsets.all(padding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -40,41 +39,42 @@ class _SelectInstitutePageState extends State<SelectInstitutePage> {
                     _Institute inst = new _Institute(
                         "Shri Guru Gobind Singhji Institute of Engineering & Technology",
                         "Nanded");
-                    return Container(
-                      child: ListTile(
-                        title: Text(inst.name),
-                        subtitle: Text(inst.city),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginPage(
-                                      loginType: widget.loginType,
-                                      instituteName: inst.name,
-                                    ),
-                              ));
-                        },
-                      ),
-                      decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(width: 0.25))),
+                    return ListTile(
+                      leading: Icon(Icons.school),
+                      title: Text(inst.name),
+                      subtitle: Text(inst.city),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  LoginPage(
+                                    loginType: widget.loginType,
+                                    instituteName: inst.name,
+                                  ),
+                            ));
+                      },
                     );
                   },
-                  itemCount: 100))
+                  itemCount: 10))
         ],
       ),
     ));
   }
 
-  Align _makeBackNavigation(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: FlatButton.icon(
-        padding: const EdgeInsets.all(0.0),
-        icon: Icon(Icons.navigate_before),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        label: Text(widget.loginType),
+  Padding _makeBackNavigation(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: FlatButton.icon(
+          padding: const EdgeInsets.all(0.0),
+          icon: Icon(Icons.navigate_before),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          label: Text(widget.loginType),
+        ),
       ),
     );
   }
@@ -89,7 +89,7 @@ class _SelectInstitutePageState extends State<SelectInstitutePage> {
     const double padding = 8.0;
     const double fontSize = 30.0;
     return Padding(
-      padding: const EdgeInsets.all(padding),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Text(
         "Select Institute",
         style: TextStyle(fontSize: fontSize),
@@ -98,9 +98,9 @@ class _SelectInstitutePageState extends State<SelectInstitutePage> {
   }
 
   Padding _makeTitleUnderline() {
-    const double paddingLeft = 12.0;
+    const double paddingLeft = 16.0;
     const double paddingTop = 4.0;
-    const double lineWidth = 38.0;
+    const double lineWidth = 32.0;
     const double lineHeight = 3.0;
     return Padding(
       padding: const EdgeInsets.only(left: paddingLeft, top: paddingTop),

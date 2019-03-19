@@ -1,0 +1,45 @@
+Stack(
+          children: <Widget>[
+            Positioned(
+                child: ListView(
+                  children: <Widget>[
+                    SizedBox(
+                      height: kToolbarHeight,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left:MediaQuery.of(context).size.width/4, right: MediaQuery.of(context).size.width/4),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width/2,
+                        height: MediaQuery.of(context).size.width/2,
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            image: DecorationImage(
+                                image: NetworkImage("https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg"),
+                                fit: BoxFit.cover
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width/4)),
+                          boxShadow: [
+                            BoxShadow(blurRadius: 4.0, color: Colors.black,)
+                          ]
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: kToolbarHeight/3,
+                    ),
+                    Center(
+                      child: Text(
+                          "Tom Cruise",
+                        style: TextStyle(
+                          fontSize: 25.0
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0*kToolbarHeight,
+                    ),
+                  ],
+                ),
+            )
+          ],
+        )
