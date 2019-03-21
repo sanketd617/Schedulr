@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:schedulr/global.dart';
+import 'package:schedulr/views/institute_home.dart';
 import 'package:schedulr/views/student_home.dart';
 
 class LoginPage extends StatefulWidget {
@@ -147,11 +148,28 @@ class _LoginPageState extends State<LoginPage> {
               _formKey.currentState.save();
               //TODO
             }
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => StudentHome(),
-                ));
+            if (widget.loginType == LoginType.instituteLogin) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        InstituteHome(instituteName: "SGGSIE&T, Nanded",),
+                  ));
+            }
+            else if (widget.loginType == LoginType.facultyLogin) {
+//              Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                    builder: (context) => FacultyHome(),
+//                  ));
+            }
+            else if (widget.loginType == LoginType.studentLogin) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StudentHome(),
+                  ));
+            }
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),

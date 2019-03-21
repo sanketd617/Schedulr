@@ -107,15 +107,15 @@ class _SubjectAttendancePageState extends State<SubjectAttendancePage> {
         int attendanceStatus = attendanceTypes[new Random().nextInt(11)];
 
         String monthDay =
-            count > startDay - 1 && day <= numDays ? day.toString() : "";
+        count > startDay - 1 && day <= numDays ? day.toString() : "";
         Color color = attendanceStatus == AttendanceStatus.present
             ? Colors.greenAccent[100]
             : attendanceStatus == AttendanceStatus.absent
-                ? Colors.redAccent
-                : Colors.white;
+            ? Colors.redAccent
+            : Colors.grey[200];
 
         if (j == 0 || j == 6) {
-          color = Colors.white;
+          color = Colors.grey[200];
         }
 
         if (monthDay == "") color = Colors.grey[300];
@@ -124,8 +124,7 @@ class _SubjectAttendancePageState extends State<SubjectAttendancePage> {
           height: (height - 2 * padding - 12 * margin) / 6,
           width: (width - 2 * padding - 14 * margin) / 7,
           margin: const EdgeInsets.all(margin),
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey), color: color),
+          decoration: BoxDecoration(color: color),
           child: Center(
             child: Text(
               monthDay,
