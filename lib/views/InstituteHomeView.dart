@@ -1,19 +1,35 @@
+// departments
+// all depts
+//faculties
+//students
+//timetable
+//labs & classrooms
+// declare holiday
+// declaration form
+// academic time table
+// time table view
+// Notifications
+// notifications
+
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:schedulr/global.dart';
-import 'package:schedulr/main.dart';
-import 'package:schedulr/views/attendance.dart';
-import 'package:schedulr/views/notifications.dart';
-import 'package:schedulr/views/time_table.dart';
+import 'package:schedulr/Global.dart';
+import 'package:schedulr/Main.dart';
+import 'package:schedulr/views/AttendanceView.dart';
+import 'package:schedulr/views/DepartmentListView.dart';
+import 'package:schedulr/views/NotificationView.dart';
+import 'package:schedulr/views/TimeTableView.dart';
 
-class StudentHome extends StatefulWidget {
-  StudentHome({Key key}) : super(key: key);
+class InstituteHome extends StatefulWidget {
+  InstituteHome({Key key, this.instituteName}) : super(key: key);
+
+  final String instituteName;
 
   @override
-  _StudentHomeState createState() => _StudentHomeState();
+  _InstituteHomeState createState() => _InstituteHomeState();
 }
 
-class _StudentHomeState extends State<StudentHome> {
+class _InstituteHomeState extends State<InstituteHome> {
   final String url =
       "http://www.mhcsa.org.au/wp-content/uploads/2016/08/default-non-user-no-photo.jpg";
   GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
@@ -29,7 +45,13 @@ class _StudentHomeState extends State<StudentHome> {
               backgroundColor: Colors.grey[900],
               expandedHeight: MediaQuery.of(context).size.height / 3,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text("Some Name"),
+                collapseMode: CollapseMode.parallax,
+                titlePadding: const EdgeInsets.all(8.0),
+                title: Text(
+                  widget.instituteName,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 16.0),
+                ),
                 background: Image.network(
                   url,
                   fit: BoxFit.cover,
@@ -48,39 +70,58 @@ class _StudentHomeState extends State<StudentHome> {
   }
 
   void openNotifications() {
-    Navigator.push(context, MaterialPageRoute(
-      builder: (context) => NotificationsPage(),
-    ));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NotificationsPage(),
+        ));
+  }
+
+  void openDepartments() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DepartmentsPage(),
+        ));
   }
 
   void openAttendance() {
-    Navigator.push(context, MaterialPageRoute(
-      builder: (context) => AttendancePage(),
-    ));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AttendancePage(),
+        ));
   }
 
   void openTimeTable() {
-    Navigator.push(context, MaterialPageRoute(
-      builder: (context) => TimeTablePage(),
-    ));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TimeTablePage(),
+        ));
   }
 
   List buildList() {
     List<Widget> widgets = List();
 
     widgets.add(
-      _makeWidget(Icons.notifications, "Notifications", "1 unread", "",
-          openNotifications),
+      _makeWidget(Icons.account_balance, "Departments", "View all departments",
+          "", openDepartments),
     );
 
     widgets.add(
-      _makeWidget(
-          Icons.event_note, "Attendance", "85%", "Excellent", openAttendance),
+      _makeWidget(Icons.date_range, "Holidays", "View & declare holidays", "",
+          openAttendance),
     );
 
     widgets.add(
-      _makeWidget(Icons.calendar_today, "Time Table", "USP", "Up next : DCN",
-          openTimeTable),
+      _makeWidget(Icons.notifications, "Notifications", "View notifications",
+          "", openNotifications),
+    );
+
+    widgets.add(
+      _makeWidget(Icons.calendar_today, "Academic time table",
+          "View time table", "", openTimeTable),
     );
 
 //    widgets.add(

@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:schedulr/global.dart';
-import 'package:schedulr/views/login.dart';
+import 'package:schedulr/Global.dart';
+import 'package:schedulr/views/auth/LoginView.dart';
 import 'package:intl/intl.dart';
 
 class SubjectAttendancePage extends StatefulWidget {

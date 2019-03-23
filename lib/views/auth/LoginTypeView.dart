@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:schedulr/global.dart';
-import 'package:schedulr/views/select_institute.dart';
+import 'package:schedulr/Global.dart';
+import 'package:schedulr/views/auth/SelectInstituteView.dart';
 
 class LoginTypePage extends StatefulWidget {
   LoginTypePage({Key key, this.title}) : super(key: key);
@@ -62,7 +62,7 @@ class _LoginTypePageState extends State<LoginTypePage> {
     return Padding(
       padding: const EdgeInsets.all(padding),
       child: Text(
-        AppDetails.appName,
+        AppConfig.appName,
         style: TextStyle(fontSize: fontSize),
       ),
     );

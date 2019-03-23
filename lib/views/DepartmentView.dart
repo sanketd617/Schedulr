@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:schedulr/global.dart';
-import 'package:schedulr/views/students.dart';
-import 'package:schedulr/views/subject_attendance.dart';
+import 'package:schedulr/Global.dart';
+import 'package:schedulr/views/StudentListView.dart';
+import 'package:schedulr/views/SubjectAttendanceView.dart';
 
 class DepartmentPage extends StatefulWidget {
   DepartmentPage({Key key, this.department, this.shortName}) : super(key: key);
@@ -93,12 +93,10 @@ class _DepartmentPageState extends State<DepartmentPage> {
         style: TextStyle(color: Colors.grey[900], fontWeight: FontWeight.bold),
       ),
       children: <Widget>[
-        _makeStudentTypeTile(StudentType.UG_FirstY),
-        _makeStudentTypeTile(StudentType.UG_SecondY),
-        _makeStudentTypeTile(StudentType.UG_ThirdY),
-        _makeStudentTypeTile(StudentType.UG_FinalY),
-        _makeStudentTypeTile(StudentType.PG_FirstY),
-        _makeStudentTypeTile(StudentType.PG_SecondY),
+        _makeStudentTypeTile(StudentType.firstYear),
+        _makeStudentTypeTile(StudentType.secondYear),
+        _makeStudentTypeTile(StudentType.thirdYear),
+        _makeStudentTypeTile(StudentType.finalYear),
       ],
     );
   }

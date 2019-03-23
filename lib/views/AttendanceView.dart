@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:schedulr/views/subject_attendance.dart';
+import 'package:schedulr/views/SubjectAttendanceView.dart';
 
 class AttendancePage extends StatefulWidget {
   AttendancePage({Key key, this.title}) : super(key: key);

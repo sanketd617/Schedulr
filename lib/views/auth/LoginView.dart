@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:schedulr/global.dart';
-import 'package:schedulr/views/institute_home.dart';
-import 'package:schedulr/views/student_home.dart';
+import 'package:schedulr/controllers/AuthController.dart';
+import 'package:schedulr/Global.dart';
+import 'package:schedulr/models/Institute.dart';
+import 'package:schedulr/models/User.dart';
+import 'package:schedulr/views/InstituteHomeView.dart';
+import 'package:schedulr/views/StudentHomeView.dart';
+import 'package:http/http.dart' as HTTP;
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.loginType, this.instituteName}) : super(key: key);
+  LoginPage({Key key, this.loginType, this.institute}) : super(key: key);
 
   final String loginType;
-  final String instituteName;
+  final Institute institute;
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -19,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   String _email, _password;
   bool _obscurePassword = true;
   Color _passIndicatorColor = Colors.grey;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
     const double paddingTop = 0.0;
 
     return Scaffold(
-        body: Form(
+        body: isLoading ? loader() : Form(
             key: _formKey,
             child: ListView(
               padding: const EdgeInsets.fromLTRB(
@@ -65,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
               .of(context)
               .size
               .width * 0.8,
-          child: Text(widget.instituteName,),
+          child: Text(widget.institute.name,),
         ),
       ),
     );
@@ -144,17 +149,29 @@ class _LoginPageState extends State<LoginPage> {
         width: buttonWidth,
         child: FlatButton(
           onPressed: () {
+
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              //TODO
-            }
-            if (widget.loginType == LoginType.instituteLogin) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        InstituteHome(instituteName: "SGGSIE&T, Nanded",),
-                  ));
+              setState(() {
+                isLoading = true;
+              });
+              AuthController.login(
+                  _email, _password, widget.institute.serverURL,
+                  widget.loginType, (User user) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          StudentHome(
+                            user: user,
+                          ),
+                    ));
+                setState(() {
+                  isLoading = false;
+                });
+              }, () {
+
+              });
             }
             else if (widget.loginType == LoginType.facultyLogin) {
 //              Navigator.push(
@@ -164,11 +181,7 @@ class _LoginPageState extends State<LoginPage> {
 //                  ));
             }
             else if (widget.loginType == LoginType.studentLogin) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => StudentHome(),
-                  ));
+
             }
           },
           shape: RoundedRectangleBorder(

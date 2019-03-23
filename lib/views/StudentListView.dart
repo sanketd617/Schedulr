@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:schedulr/views/department.dart';
-import 'package:schedulr/views/subject_attendance.dart';
+import 'package:schedulr/views/DepartmentView.dart';
+import 'package:schedulr/views/SubjectAttendanceView.dart';
 
 class StudentsListPage extends StatefulWidget {
   StudentsListPage({Key key, this.type, this.deptShortName, this.department})
