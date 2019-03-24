@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:schedulr/controllers/StorageController.dart';
+import 'package:schedulr/models/Institute.dart';
+import 'package:schedulr/models/User.dart';
+import 'package:schedulr/views/InstituteHomeView.dart';
 import 'package:schedulr/views/StudentHomeView.dart';
 import 'package:schedulr/views/auth/LoginTypeView.dart';
 import 'Global.dart';
@@ -32,6 +35,9 @@ class _MyAppState extends State<MyApp> {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
                   if (snapshot.data == null) return LoginTypePage();
+                  if (snapshot.data is Institute) {
+                    return InstituteHomePage(institute: snapshot.data,);
+                  }
                   return StudentHomePage(user: snapshot.data,);
                 default:
                   return loader();

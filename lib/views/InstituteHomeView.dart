@@ -15,21 +15,24 @@ import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:schedulr/Global.dart';
 import 'package:schedulr/Main.dart';
+import 'package:schedulr/controllers/AuthController.dart';
+import 'package:schedulr/models/Institute.dart';
 import 'package:schedulr/views/AttendanceView.dart';
 import 'package:schedulr/views/DepartmentListView.dart';
 import 'package:schedulr/views/NotificationView.dart';
 import 'package:schedulr/views/TimeTableView.dart';
+import 'package:schedulr/views/auth/LoginTypeView.dart';
 
-class InstituteHome extends StatefulWidget {
-  InstituteHome({Key key, this.instituteName}) : super(key: key);
+class InstituteHomePage extends StatefulWidget {
+  InstituteHomePage({Key key, this.institute}) : super(key: key);
 
-  final String instituteName;
+  final Institute institute;
 
   @override
-  _InstituteHomeState createState() => _InstituteHomeState();
+  _InstituteHomePageState createState() => _InstituteHomePageState();
 }
 
-class _InstituteHomeState extends State<InstituteHome> {
+class _InstituteHomePageState extends State<InstituteHomePage> {
   final String url =
       "http://www.mhcsa.org.au/wp-content/uploads/2016/08/default-non-user-no-photo.jpg";
   GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
@@ -48,7 +51,7 @@ class _InstituteHomeState extends State<InstituteHome> {
                 collapseMode: CollapseMode.parallax,
                 titlePadding: const EdgeInsets.all(8.0),
                 title: Text(
-                  widget.instituteName,
+                  widget.institute.name,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 16.0),
                 ),
@@ -59,7 +62,16 @@ class _InstituteHomeState extends State<InstituteHome> {
               ),
               actions: <Widget>[
                 IconButton(
-                    icon: Icon(Icons.power_settings_new), onPressed: () {})
+                    icon: Icon(Icons.power_settings_new), onPressed: () {
+                  AuthController.logout(() {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              LoginTypePage(),
+                        ));
+                  });
+                })
               ],
               floating: false,
               pinned: true,

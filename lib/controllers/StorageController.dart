@@ -8,14 +8,20 @@ class StorageController {
   static FlutterSecureStorage storage;
   static User user;
 
-  static Future<User> getUser() async {
+  static Future getUser() async {
     if (storage == null)
       storage = new FlutterSecureStorage();
 
     String userString = await storage.read(key: "user");
 
-    if (userString == null)
-      return null;
+    if (userString == null) {
+      String instituteString = await storage.read(key: "institute");
+      if (instituteString == null)
+        return null;
+
+      var json = JSON.jsonDecode(instituteString);
+      return Institute.fromJSON(json);
+    }
 
     var json = JSON.jsonDecode(userString);
     User user = User.fromJSON(json);
@@ -46,9 +52,9 @@ class StorageController {
     if (storage == null)
       storage = new FlutterSecureStorage();
 
-    String instituteString = JSON.jsonEncode(json);
+    String string = JSON.jsonEncode(json);
 
-    storage.write(key: key, value: instituteString);
+    storage.write(key: key, value: string);
   }
 
   static Future unsave(String key) async {

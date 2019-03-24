@@ -4,6 +4,7 @@ import 'package:schedulr/controllers/AuthController.dart';
 import 'package:schedulr/Global.dart';
 import 'package:schedulr/models/Institute.dart';
 import 'package:schedulr/models/User.dart';
+import 'package:schedulr/views/InstituteHomeView.dart';
 import 'package:schedulr/views/StudentHomeView.dart';
 import 'package:schedulr/views/auth/SelectInstituteView.dart';
 
@@ -162,9 +163,19 @@ class _LoginPageState extends State<LoginPage> {
               setState(() {
                 isLoading = true;
               });
-              AuthController.login(
-                  _email, _password, widget.institute.serverURL,
-                  widget.loginType, onSuccess, onError);
+              if (widget.loginType == LoginType.studentLogin) {
+                AuthController.login(
+                    _email, _password, widget.institute.serverURL,
+                    widget.loginType, onStudentLoginSuccess, onError);
+              }
+              else if (widget.loginType == LoginType.facultyLogin) {
+
+              }
+              else if (widget.loginType == LoginType.instituteLogin) {
+                AuthController.login(
+                    _email, _password, widget.institute.serverURL,
+                    widget.loginType, onInstituteLoginSuccess, onError);
+              }
             }
           },
           shape: RoundedRectangleBorder(
@@ -273,13 +284,27 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void onSuccess(User user) {
+  void onStudentLoginSuccess(User user) {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) =>
               StudentHomePage(
                 user: user,
+              ),
+        ));
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void onInstituteLoginSuccess(Institute institute) {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              InstituteHomePage(
+                institute: institute,
               ),
         ));
     setState(() {

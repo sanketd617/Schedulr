@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as HTTP;
 import 'package:schedulr/Global.dart';
 import 'package:schedulr/controllers/StorageController.dart';
+import 'package:schedulr/models/Institute.dart';
 import 'dart:convert' as JSON;
 
 import 'package:schedulr/models/User.dart';
@@ -17,17 +18,27 @@ class AuthController {
     else if (loginType == LoginType.instituteLogin)
       url = AppConfig.serverURL + "/api/institute/signin";
 
+    print(url);
+
     var response = await HTTP.post(url,
         body: {"email": email, "password": password},
         headers: {"Accept": "application/json"});
 
     var json = JSON.jsonDecode(response.body);
+    print(json);
 
     switch (response.statusCode) {
       case 200:
-        var user = User.fromJSON(json["data"]);
-        StorageController.save("user", json["data"]);
-        onSuccess(user);
+        if (loginType == LoginType.instituteLogin) {
+          var institute = Institute.fromJSON(json["data"]);
+          StorageController.save("institute", json["data"]);
+          onSuccess(institute);
+        }
+        else {
+          var user = User.fromJSON(json["data"]);
+          StorageController.save("user", json["data"]);
+          onSuccess(user);
+        }
         break;
       case 401:
       case 404:

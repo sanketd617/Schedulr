@@ -3,7 +3,7 @@ import 'dart:core';
 
 class AppConfig {
   static final String appName = "Schedulr";
-  static final String serverURL = "http://3.89.93.88:/schedulr";
+  static final String serverURL = "http://3.89.93.88/schedulr";
 }
 
 class LoginType {

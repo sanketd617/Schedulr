@@ -12,17 +12,12 @@ class APIController {
 
     var response = await HTTP.get(url);
     var json = JSON.jsonDecode(response.body);
-
     for (int i = 0; i < json['data'].length; i++) {
-      var institute = Institute(
-          json["data"][i]['name'],
-          json["data"][i]['short_name'],
-          json["data"][i]['city'],
-          json["data"][i]['state'],
-          json["data"][i]['server_url']);
+      var institute = Institute.fromJSON(json["data"][i]);
       listOfInstitutes.add(institute);
       await StorageController.save("institutes", json);
     }
+
     return listOfInstitutes;
   }
 }
