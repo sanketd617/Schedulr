@@ -15,6 +15,7 @@ class _AttendancePageState extends State<AttendancePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           automaticallyImplyLeading: true,
           backgroundColor: Colors.grey[900],

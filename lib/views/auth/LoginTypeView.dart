@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:schedulr/Global.dart';
 import 'package:schedulr/views/auth/SelectInstituteView.dart';
 
 class LoginTypePage extends StatefulWidget {
-  LoginTypePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  LoginTypePage({Key key}) : super(key: key);
 
   @override
   _LoginTypePageState createState() => _LoginTypePageState();
@@ -17,33 +14,35 @@ class _LoginTypePageState extends State<LoginTypePage> {
 
   @override
   Widget build(BuildContext context) {
-    const double padding = 22.0;
-    const double paddingTop = 0.0;
-
     return Scaffold(
-        body: Form(
-            key: _formKey,
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(
-                  padding, paddingTop, padding, padding),
-              children: <Widget>[
-                _makeSizedBox(1.0),
-                _makeTitle(),
-                _makeTitleUnderline(),
-                _makeSizedBox(1.0),
-                _makeSubTitle(),
-                _makeSizedBox(0.5),
-                _makeLoginButton(context, "Student", LoginType.studentLogin),
-                _makeSizedBox(0.5),
-                _makeLoginButton(context, "Faculty", LoginType.facultyLogin),
-                _makeSizedBox(0.5),
-                _makeLoginButton(
-                    context, "Institute", LoginType.instituteLogin),
-              ],
-            )));
+        body: buildForm(context));
   }
 
-  Padding _makeSubTitle() {
+  Form buildForm(BuildContext context) {
+    const double padding = 22.0;
+    const double paddingTop = 0.0;
+    return Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(
+              padding, paddingTop, padding, padding),
+          children: <Widget>[
+            buildSizedBox(1.0),
+            buildTitle(),
+            buildTitleUnderline(),
+            buildSizedBox(1.0),
+            buildSubtitle(),
+            buildSizedBox(0.5),
+            buildLoginButton(context, "Student", LoginType.studentLogin),
+            buildSizedBox(0.5),
+            buildLoginButton(context, "Faculty", LoginType.facultyLogin),
+            buildSizedBox(0.5),
+            buildLoginButton(context, "Institute", LoginType.instituteLogin),
+          ],
+        ));
+  }
+
+  Padding buildSubtitle() {
     const double padding = 8.0;
     const double fontSize = 20.0;
     return Padding(
@@ -56,7 +55,7 @@ class _LoginTypePageState extends State<LoginTypePage> {
         ));
   }
 
-  Padding _makeTitle() {
+  Padding buildTitle() {
     const double padding = 8.0;
     const double fontSize = 42.0;
     return Padding(
@@ -68,7 +67,7 @@ class _LoginTypePageState extends State<LoginTypePage> {
     );
   }
 
-  Padding _makeTitleUnderline() {
+  Padding buildTitleUnderline() {
     const double paddingLeft = 12.0;
     const double paddingTop = 4.0;
     const double lineWidth = 38.0;
@@ -86,7 +85,7 @@ class _LoginTypePageState extends State<LoginTypePage> {
     );
   }
 
-  Align _makeLoginButton(BuildContext context, String text, String loginType) {
+  Align buildLoginButton(BuildContext context, String text, String loginType) {
     const double buttonHeight = 50.0;
     const double buttonWidth = 270.0;
     const double borderRadius = 50.0;
@@ -99,7 +98,7 @@ class _LoginTypePageState extends State<LoginTypePage> {
         width: buttonWidth,
         child: FlatButton(
           onPressed: () {
-            Navigator.push(
+            Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
@@ -119,7 +118,7 @@ class _LoginTypePageState extends State<LoginTypePage> {
     );
   }
 
-  SizedBox _makeSizedBox(double ratio) {
+  SizedBox buildSizedBox(double ratio) {
     return SizedBox(
       height: kToolbarHeight * ratio,
     );

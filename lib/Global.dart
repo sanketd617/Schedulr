@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:core';
 
 class AppConfig {
-  static final String appName = "SomeApp";
+  static final String appName = "Schedulr";
   static final String serverURL = "http://3.89.93.88:/schedulr";
 }
 

@@ -10,4 +10,13 @@ class User {
         lastName: json["lastname"],
         regNo: json["regno"]);
   }
+
+  Map<String, String> toJSON() {
+    return {
+      "email": this.email,
+      "firstname": this.firstName,
+      "lastname": this.lastName,
+      "regno": this.regNo
+    };
+  }
 }

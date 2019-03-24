@@ -1,9 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:schedulr/controllers/ApiController.dart';
 import 'package:schedulr/Global.dart';
+import 'package:schedulr/controllers/StorageController.dart';
 import 'package:schedulr/models/Institute.dart';
+import 'package:schedulr/views/auth/LoginTypeView.dart';
 import 'package:schedulr/views/auth/LoginView.dart';
 
 class SelectInstitutePage extends StatefulWidget {
@@ -16,30 +16,39 @@ class SelectInstitutePage extends StatefulWidget {
 }
 
 class _SelectInstitutePageState extends State<SelectInstitutePage> {
-  var futureBuilder;
+  var listContent;
   int i = 0;
 
   @override
   Widget build(BuildContext context) {
-    const double padding = 16.0;
-    const double paddingTop = 10.0;
-
     return Scaffold(body: _makeBody());
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
-    futureBuilder = FutureBuilder(
-      future: APIController.getInstitutes(),
+    listContent = FutureBuilder(
+      future: StorageController.getInstitutes(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return FutureBuilder(
+              future: APIController.getInstitutes(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    return _makeList(snapshot.data);
+                  } else if (snapshot.hasError) {
+                    return somethingWentWrong();
+                  }
+                }
+                return loader();
+              },
+            );
+          }
+          else if (snapshot.hasData) {
             return _makeList(snapshot.data);
-          } else if (snapshot.hasError) {
-            return somethingWentWrong();
           }
         }
         return loader();
@@ -47,9 +56,9 @@ class _SelectInstitutePageState extends State<SelectInstitutePage> {
     );
   }
 
-  void loadInstitutes(bool networkLoad) {
+  void loadInstitutes() {
     setState(() {
-      futureBuilder = FutureBuilder(
+      listContent = FutureBuilder(
         future: APIController.getInstitutes(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -75,7 +84,7 @@ class _SelectInstitutePageState extends State<SelectInstitutePage> {
           _makeTitle(),
           _makeTitleUnderline(),
           Divider(),
-          Expanded(child: futureBuilder)
+          Expanded(child: listContent)
         ],
       ),
     );
@@ -90,7 +99,8 @@ class _SelectInstitutePageState extends State<SelectInstitutePage> {
             title: Text(institutes[index].name),
             subtitle: Text(institutes[index].city),
             onTap: () {
-              Navigator.push(
+              StorageController.save("institute", institutes[index].toJSON());
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => LoginPage(
@@ -113,7 +123,12 @@ class _SelectInstitutePageState extends State<SelectInstitutePage> {
           padding: const EdgeInsets.all(0.0),
           icon: Icon(Icons.navigate_before),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      LoginTypePage(),
+                ));
           },
           label: Text(widget.loginType),
         ),
@@ -128,7 +143,6 @@ class _SelectInstitutePageState extends State<SelectInstitutePage> {
   }
 
   Padding _makeTitle() {
-    const double padding = 8.0;
     const double fontSize = 30.0;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -144,7 +158,7 @@ class _SelectInstitutePageState extends State<SelectInstitutePage> {
               child: InkWell(
                 child: Icon(Icons.refresh),
                 onTap: () {
-                  loadInstitutes(true);
+                  loadInstitutes();
                 },
               ),
             ),

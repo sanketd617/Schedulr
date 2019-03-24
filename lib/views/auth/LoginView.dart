@@ -4,9 +4,8 @@ import 'package:schedulr/controllers/AuthController.dart';
 import 'package:schedulr/Global.dart';
 import 'package:schedulr/models/Institute.dart';
 import 'package:schedulr/models/User.dart';
-import 'package:schedulr/views/InstituteHomeView.dart';
 import 'package:schedulr/views/StudentHomeView.dart';
-import 'package:http/http.dart' as HTTP;
+import 'package:schedulr/views/auth/SelectInstituteView.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.loginType, this.institute}) : super(key: key);
@@ -24,106 +23,115 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
   Color _passIndicatorColor = Colors.grey;
   bool isLoading = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    const double padding = 22.0;
-    const double paddingTop = 0.0;
-
     return Scaffold(
-        body: isLoading ? loader() : Form(
-            key: _formKey,
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(
-                  padding, paddingTop, padding, padding),
-              children: <Widget>[
-                _makeSizedBox(1.0),
-                _makeBackNavigation(context),
-                _makeTitle(),
-                _makeTitleUnderline(),
-                _makeSizedBox(1.0),
-                _makeEmailField(),
-                _makeSizedBox(0.45),
-                _makePasswordField(),
-                _makeForgotPasswordText(),
-                _makeSizedBox(0.80),
-                _makeLoginButton(context),
-                _makeSizedBox(0.40),
-                _makeAlternateLoginText(),
-                _makeSizedBox(0.25),
-                _makeSocialLoginButtons()
-              ],
-            )));
+        key: _scaffoldKey,
+        body: isLoading ? loader() : buildForm(context));
   }
 
-  Align _makeBackNavigation(BuildContext context) {
+  Form buildForm(BuildContext context) {
+    const double padding = 22.0;
+    const double paddingTop = 0.0;
+    return Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(
+              padding, paddingTop, padding, padding),
+          children: <Widget>[
+            buildSizedBox(1.0),
+            buildBackNavigation(context),
+            buildTitle(),
+            buildTitleUnderline(),
+            buildSizedBox(1.0),
+            buildEmailField(),
+            buildSizedBox(0.45),
+            buildPasswordField(),
+            buildForgotPasswordText(),
+            buildSizedBox(0.80),
+            buildLoginButton(context),
+            buildSizedBox(0.40),
+            buildAlternateLoginText(),
+            buildSizedBox(0.25),
+            buildSocialLoginButtons()
+          ],
+        ));
+  }
+
+  Align buildBackNavigation(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
       child: FlatButton.icon(
         padding: const EdgeInsets.all(0.0),
         icon: Icon(Icons.navigate_before),
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    SelectInstitutePage(
+                      loginType: widget.loginType,
+                    ),
+              ));
         },
         label: Container(
           width: MediaQuery
               .of(context)
               .size
               .width * 0.8,
-          child: Text(widget.institute.name,),
+          child: Text(widget.institute.name, overflow: TextOverflow.ellipsis,),
         ),
       ),
     );
   }
 
-  Row _makeSocialLoginButtons() {
+  Row buildSocialLoginButtons() {
+    var height = 46.0;
+    var width = 23.0;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Container(
-          child: InkWell(
-            onTap: () {
-              // TODO
-            },
-            borderRadius: BorderRadius.circular(30.0),
-            child: Icon(GroovinMaterialIcons.google),
-          ),
-          height: 46.0,
-          width: 46.0,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey, width: 0.5)),
-        ),
+        buildSocialLoginButton(GroovinMaterialIcons.google),
         Container(
           child: null,
-          height: 46.0,
-          width: 23.0,
+          height: height,
+          width: width,
         ),
-        Container(
-          child: InkWell(
-            onTap: () {
-              // TODO
-            },
-            borderRadius: BorderRadius.circular(30.0),
-            child: Icon(GroovinMaterialIcons.fingerprint),
-          ),
-          height: 46.0,
-          width: 46.0,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey, width: 0.5)),
-        )
+        buildSocialLoginButton(GroovinMaterialIcons.fingerprint)
       ],
     );
   }
 
-  SizedBox _makeSizedBox(double ratio) {
+  Container buildSocialLoginButton(IconData icon) {
+    var radius = 30.0;
+    var height = 46.0;
+    var width = 46.0;
+    var borderWidth = 0.5;
+    return Container(
+      child: InkWell(
+        onTap: () {
+          // TODO
+        },
+        borderRadius: BorderRadius.circular(radius),
+        child: Icon(icon),
+      ),
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.grey, width: borderWidth)),
+    );
+  }
+
+  SizedBox buildSizedBox(double ratio) {
     return SizedBox(
       height: kToolbarHeight * ratio,
     );
   }
 
-  Align _makeAlternateLoginText() {
+  Align buildAlternateLoginText() {
     const double fontSize = 12.0;
     Color fontColor = Colors.grey;
     const String text = "or login with";
@@ -136,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Align _makeLoginButton(BuildContext context) {
+  Align buildLoginButton(BuildContext context) {
     const double buttonHeight = 50.0;
     const double buttonWidth = 270.0;
     const double borderRadius = 50.0;
@@ -149,7 +157,6 @@ class _LoginPageState extends State<LoginPage> {
         width: buttonWidth,
         child: FlatButton(
           onPressed: () {
-
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
               setState(() {
@@ -157,31 +164,7 @@ class _LoginPageState extends State<LoginPage> {
               });
               AuthController.login(
                   _email, _password, widget.institute.serverURL,
-                  widget.loginType, (User user) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          StudentHome(
-                            user: user,
-                          ),
-                    ));
-                setState(() {
-                  isLoading = false;
-                });
-              }, () {
-
-              });
-            }
-            else if (widget.loginType == LoginType.facultyLogin) {
-//              Navigator.push(
-//                  context,
-//                  MaterialPageRoute(
-//                    builder: (context) => FacultyHome(),
-//                  ));
-            }
-            else if (widget.loginType == LoginType.studentLogin) {
-
+                  widget.loginType, onSuccess, onError);
             }
           },
           shape: RoundedRectangleBorder(
@@ -197,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Padding _makeForgotPasswordText() {
+  Padding buildForgotPasswordText() {
     const double padding = 8.0;
     const double fontSize = 12.0;
     const Color fontColor = Colors.grey;
@@ -217,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  TextFormField _makePasswordField() {
+  TextFormField buildPasswordField() {
     return TextFormField(
       onSaved: (password) {
         _password = password;
@@ -246,7 +229,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  TextFormField _makeEmailField() {
+  TextFormField buildEmailField() {
     return TextFormField(
       onSaved: (email) {
         _email = email;
@@ -260,7 +243,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Padding _makeTitle() {
+  Padding buildTitle() {
     const double padding = 8.0;
     const double fontSize = 42.0;
     return Padding(
@@ -272,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Padding _makeTitleUnderline() {
+  Padding buildTitleUnderline() {
     const double paddingLeft = 12.0;
     const double paddingTop = 4.0;
     const double lineWidth = 38.0;
@@ -288,5 +271,27 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void onSuccess(User user) {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              StudentHomePage(
+                user: user,
+              ),
+        ));
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void onError(String error) {
+    setState(() {
+      isLoading = false;
+    });
+
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text(error)));
   }
 }

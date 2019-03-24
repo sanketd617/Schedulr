@@ -21,7 +21,7 @@ class APIController {
           json["data"][i]['state'],
           json["data"][i]['server_url']);
       listOfInstitutes.add(institute);
-      await StorageController.save(json);
+      await StorageController.save("institutes", json);
     }
     return listOfInstitutes;
   }
