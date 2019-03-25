@@ -93,7 +93,7 @@ class _InstituteHomePageState extends State<InstituteHomePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DepartmentsPage(),
+          builder: (context) => DepartmentsPage(institute: widget.institute),
         ));
   }
 
@@ -119,11 +119,6 @@ class _InstituteHomePageState extends State<InstituteHomePage> {
     widgets.add(
       _makeWidget(Icons.account_balance, "Departments", "View all departments",
           "", openDepartments),
-    );
-
-    widgets.add(
-      _makeWidget(Icons.date_range, "Holidays", "View & declare holidays", "",
-          openAttendance),
     );
 
     widgets.add(

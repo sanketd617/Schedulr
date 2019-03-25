@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert' as JSON;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:schedulr/models/Department.dart';
 import 'package:schedulr/models/Institute.dart';
 import 'package:schedulr/models/User.dart';
 
@@ -46,6 +47,26 @@ class StorageController {
     }
 
     return listOfInstitutes;
+  }
+
+  static Future<List<Department>> getDepartments() async {
+    if (storage == null)
+      storage = new FlutterSecureStorage();
+
+    String departmentsString = await storage.read(key: "departments");
+
+    if (departmentsString == null)
+      return null;
+
+    var json = JSON.jsonDecode(departmentsString);
+
+    List<Department> listOfDepartments = [];
+
+    for (int i = 0; i < json["data"].length; i++) {
+      listOfDepartments.add(Department.fromJSON(json["data"][i]));
+    }
+
+    return listOfDepartments;
   }
 
   static Future save(String key, json) async {

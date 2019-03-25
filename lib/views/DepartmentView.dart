@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:schedulr/Global.dart';
+import 'package:schedulr/views/FacultyListView.dart';
 import 'package:schedulr/views/StudentListView.dart';
 import 'package:schedulr/views/SubjectAttendanceView.dart';
+import 'package:schedulr/views/TimeTableView.dart';
 
 class DepartmentPage extends StatefulWidget {
   DepartmentPage({Key key, this.department, this.shortName}) : super(key: key);
@@ -29,10 +31,10 @@ class _DepartmentPageState extends State<DepartmentPage> {
         body: ListView(
           children: <Widget>[
             _makePercentageView(context),
-            _makeExpandableListTile("Students", "Total 500"),
-            _makeListTile("Faculties", "Total 20"),
-            _makeListTile("Labs & Classrooms", "Total 9"),
-            _makeListTile("Time Table", "View"),
+            _makeExpandableListTile("Students"),
+            _makeListTile("Faculties", openFacultyList),
+            _makeListTile("Labs & Classrooms", openLabList),
+            _makeListTile("Time Table", openTimeTable),
           ],
         ));
   }
@@ -77,7 +79,7 @@ class _DepartmentPageState extends State<DepartmentPage> {
     );
   }
 
-  ExpansionTile _makeExpandableListTile(String title, String subtitle) {
+  ExpansionTile _makeExpandableListTile(String title) {
     return ExpansionTile(
       leading: Container(
         padding: const EdgeInsets.only(right: 12.0),
@@ -113,14 +115,10 @@ class _DepartmentPageState extends State<DepartmentPage> {
     );
   }
 
-  ListTile _makeListTile(String title, String subtitle) {
+  ListTile _makeListTile(String title, handler) {
     return ListTile(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SubjectAttendancePage(),
-            ));
+        handler();
       },
       leading: Container(
         padding: const EdgeInsets.only(right: 12.0),
@@ -135,7 +133,6 @@ class _DepartmentPageState extends State<DepartmentPage> {
         title,
         style: TextStyle(color: Colors.grey[900], fontWeight: FontWeight.bold),
       ),
-      subtitle: Text(subtitle),
       trailing: Icon(
         Icons.keyboard_arrow_right,
         color: Colors.grey[900],
@@ -153,6 +150,31 @@ class _DepartmentPageState extends State<DepartmentPage> {
                 department: widget.department,
                 deptShortName: widget.shortName,
               ),
+        ));
+  }
+
+  void openFacultyList() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              FacultyListPage(
+                type: "Faculties",
+                department: widget.department,
+                deptShortName: widget.shortName,
+              ),
+        ));
+  }
+
+  void openLabList() {
+
+  }
+
+  void openTimeTable() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TimeTablePage(),
         ));
   }
 }

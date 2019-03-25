@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:schedulr/views/DepartmentView.dart';
 import 'package:schedulr/views/SubjectAttendanceView.dart';
 
-class StudentsListPage extends StatefulWidget {
-  StudentsListPage({Key key, this.type, this.deptShortName, this.department})
+class FacultyListPage extends StatefulWidget {
+  FacultyListPage({Key key, this.type, this.deptShortName, this.department})
       : super(key: key);
   final String type, deptShortName, department;
 
   @override
-  _StudentsListPageState createState() => _StudentsListPageState();
+  _FacultyListPageState createState() => _FacultyListPageState();
 }
 
-class _StudentsListPageState extends State<StudentsListPage> {
+class _FacultyListPageState extends State<FacultyListPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  int start = 0,
-      total = 75,
-      perPage = 10,
-      numPages;
+  int start = 0, total = 31, perPage = 10, numPages;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,12 +32,11 @@ class _StudentsListPageState extends State<StudentsListPage> {
   void initState() {
     super.initState();
     start = 0;
-    total = 75;
+    total = 31;
     perPage = 10;
     if (total % perPage == 0) {
       numPages = (total / perPage).floor();
-    }
-    else {
+    } else {
       numPages = (total / perPage).floor() + 1;
     }
   }
@@ -63,7 +60,9 @@ class _StudentsListPageState extends State<StudentsListPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Text("Page " + ((start / perPage).floor() + 1).toString() + " of " +
+          Text("Page " +
+              ((start / perPage).floor() + 1).toString() +
+              " of " +
               numPages.toString()),
           FlatButton(
             onPressed: () {
@@ -74,9 +73,7 @@ class _StudentsListPageState extends State<StudentsListPage> {
               }
             },
             child: Icon(Icons.chevron_left),
-            shape: CircleBorder(
-                side: BorderSide(color: Colors.grey[900])
-            ),
+            shape: CircleBorder(side: BorderSide(color: Colors.grey[900])),
           ),
           FlatButton(
             onPressed: () {
@@ -86,8 +83,7 @@ class _StudentsListPageState extends State<StudentsListPage> {
                     start += perPage;
                   });
                 }
-              }
-              else {
+              } else {
                 if (start / perPage < numPages - 1) {
                   setState(() {
                     start += perPage;
@@ -96,9 +92,7 @@ class _StudentsListPageState extends State<StudentsListPage> {
               }
             },
             child: Icon(Icons.chevron_right),
-            shape: CircleBorder(
-                side: BorderSide(color: Colors.grey[900])
-            ),
+            shape: CircleBorder(side: BorderSide(color: Colors.grey[900])),
           ),
         ],
       ),
@@ -110,9 +104,7 @@ class _StudentsListPageState extends State<StudentsListPage> {
   ListTile _makeListTile(String name, String regno, String shortName) {
     return ListTile(
       contentPadding: const EdgeInsets.all(8.0),
-      onTap: () {
-
-      },
+      onTap: () {},
       leading: Container(
         height: 64.0,
         width: 64.0,

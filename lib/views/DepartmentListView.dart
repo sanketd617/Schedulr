@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:schedulr/Global.dart';
+import 'package:schedulr/controllers/ApiController.dart';
+import 'package:schedulr/controllers/StorageController.dart';
+import 'package:schedulr/models/Department.dart';
+import 'package:schedulr/models/Institute.dart';
 import 'package:schedulr/views/DepartmentView.dart';
 import 'package:schedulr/views/SubjectAttendanceView.dart';
 
 class DepartmentsPage extends StatefulWidget {
-  DepartmentsPage({Key key, this.title}) : super(key: key);
+  DepartmentsPage({Key key, this.title, this.institute}) : super(key: key);
   final String title;
-
+  final Institute institute;
   @override
   _DepartmentsPageState createState() => _DepartmentsPageState();
 }
 
 class _DepartmentsPageState extends State<DepartmentsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  var body;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,27 +25,79 @@ class _DepartmentsPageState extends State<DepartmentsPage> {
           automaticallyImplyLeading: true,
           backgroundColor: Colors.grey[900],
           title: Text("Departments"),
-          actions: <Widget>[],
-        ),
-        body: ListView(
-          children: <Widget>[
-            _makeListTile(
-                "Computer Science & Engineering", "H. O .D. HOD", "CSE"),
-            _makeListTile("Information Technology", "H. O .D. HOD", "IT"),
-            _makeListTile("Mechanical Engineering", "H. O .D. HOD", "MECH"),
-            _makeListTile("Electrical Engineering", "H. O .D. HOD", "ELEC"),
-            _makeListTile("Textile Engineering", "H. O .D. HOD", "TEXT"),
-            _makeListTile("Production Engineering", "H. O .D. HOD", "PROD"),
-            _makeListTile(
-                "Instrumentation Engineering", "H. O .D. HOD", "INST"),
-            _makeListTile("Civil Engineering", "H. O .D. HOD", "CVL"),
-            _makeListTile("Electronics Engineering", "H. O .D. HOD", "EXTC"),
-            _makeListTile("Chemical Engineering", "H. O .D. HOD", "CHEM"),
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.refresh), onPressed: reloadList),
           ],
-        ));
+        ),
+        body: body
+    );
   }
 
-  ListTile _makeListTile(String department, String HOD, String shortName) {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    body = buildBody();
+  }
+
+  void reloadList() {
+    setState(() {
+      body = FutureBuilder(
+        future: APIController.getDepartments(widget.institute),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              return buildListView(snapshot.data);
+            } else if (snapshot.hasError) {
+              return somethingWentWrong();
+            }
+          }
+          return loader();
+        },
+      );
+    });
+  }
+
+  FutureBuilder buildBody() {
+    return FutureBuilder(
+      future: StorageController.getDepartments(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return FutureBuilder(
+              future: APIController.getDepartments(widget.institute),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    return buildListView(snapshot.data);
+                  } else if (snapshot.hasError) {
+                    return somethingWentWrong();
+                  }
+                }
+                return loader();
+              },
+            );
+          }
+          else if (snapshot.hasData) {
+            return buildListView(snapshot.data);
+          }
+        }
+        return loader();
+      },
+    );
+  }
+
+  ListView buildListView(List<Department> departments) {
+    return ListView.builder(itemBuilder: (BuildContext context, int index) {
+      return _makeListTile(
+          departments[index].name, departments[index].shortName,
+          departments[index].hod.firstName + " " +
+              departments[index].hod.lastName);
+    }, itemCount: departments.length,);
+  }
+
+  ListTile _makeListTile(String department, String shortName, String hod) {
     return ListTile(
       contentPadding: const EdgeInsets.all(8.0),
       onTap: () {
@@ -67,7 +124,7 @@ class _DepartmentsPageState extends State<DepartmentsPage> {
         department,
         style: TextStyle(color: Colors.grey[900], fontWeight: FontWeight.bold),
       ),
-      subtitle: Text(HOD),
+      subtitle: Text(hod),
       trailing: Icon(
         Icons.keyboard_arrow_right,
         color: Colors.grey[900],
